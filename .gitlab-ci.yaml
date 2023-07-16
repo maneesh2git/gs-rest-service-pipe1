@@ -1,0 +1,8 @@
+stages:
+- templatize
+
+some job:
+  stage: templatize
+  trigger:
+    working_directory: complete
+    include: complete/.gitlab-ci.yml

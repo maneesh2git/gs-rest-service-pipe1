@@ -1,0 +1,34 @@
+stages:
+- templatize
+- deploy
+
+breed:
+stage: templatize
+image: busybox:latest
+script:
+- j2 tpl.j2 deployment.yml -o config/master.yml
+artifacts:
+paths:
+- config/master.yml
+tags:
+- any
+
+thebadchild:
+stage: deploy
+trigger:
+include: config/master.yml
+
+why:
+stage: deploy
+script:
+- cat config/master.yml
+tags:
+- any
+
+thegoodchild:
+stage: templatize
+allow_failure: true
+trigger:
+include:
+- local: config/microservice_a.yml
+- local: config/template.yml
